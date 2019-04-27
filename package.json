@@ -4,10 +4,16 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "bcrypt": "^3.0.4",
     "express": "^4.16.4",
+    "express-handlebars": "^3.0.2",
+    "generate-password": "^1.4.1",
+    "mustache": "^3.0.1",
     "mysql": "^2.16.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mustache": "^3.0.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

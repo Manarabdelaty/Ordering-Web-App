@@ -1,0 +1,216 @@
+<h3> Cart </h3>
+<link rel="stylesheet" type="text/css" href="../public/table.css">
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<div class="list">
+<div class="invoice-table">
+  <table style="width:100%">
+ 		   	 <tr>
+    			<th></th>
+    			<th>CONFIG</th>
+          <th>PRICE</th>
+    			<th>QTY</th>
+          <th>COMMENT</th>
+          <th>ACTION</th>
+  			</tr>
+        {{#each list}}
+  			<tr>
+    			<td>
+    				<div class="left"> <p>{{@index}}</p></div>
+    				<div class = "right">
+    					<p id="item">ITEM</p>
+    					<p><a href="#"> {{this.name}}</a></p>
+    				</div>
+    			</td>
+   				<td>{{this.config_name}}</td>
+          <td>{{this.price}}</td>
+          <td>{{this.qty}}</td>
+          <td>{{this.comment}}</td>
+    			<td><a href="#" class='rem' config_id={{this.config_id}} item_id={{this.item_id}} rest_id={{this.rest_id}} menue_type={{this.menue_type}} price ={{this.price}} name={{this.name}}>Remove</a>
+          </td>
+          <td><a href="#" class='edit' config_id={{this.config_id}} item_id={{this.item_id}} rest_id={{this.rest_id}} menue_type={{this.menue_type}}>Edit Qty</a>
+          <td><a href="#" class='edit_comm' config_id={{this.config_id}} item_id={{this.item_id}} rest_id={{this.rest_id}} menue_type={{this.menue_type}}>Edit Comment</a>
+          </td>
+  			</tr>
+        {{/each}}
+</table>
+<button type="button" class="btn btn-primary"  id="checkout"> Checkout </button>
+
+<script>
+$('.rem').on("click",function(){
+  var rest_id=  $(this).attr('rest_id');
+  var item_id=  $(this).attr('item_id');
+  var menue_type=  $(this).attr('menue_type');
+  var config_id=  $(this).attr('config_id');
+
+  console.log('pressed rem');
+    $.ajax({
+      type: "GET",
+      contentType: 'application/json',
+      url: `http://localhost:3000/removeFromCart?config_id=${config_id}&item_id=${item_id}&rest_id=${rest_id}&menue_type=${menue_type}`,
+      success: function(data){
+        console.log(data);
+        if(data.status == 1){
+            location.reload();
+        }
+        else {
+          console.log('error rem');
+        }
+      }
+    });
+});
+
+</script>
+
+<div id="qtyModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <label for="usr">New Quantity</label>
+    <input type="text" class="form-control" id="new_qty">
+    <button type="button" class="btn btn-primary"  id="submit_qty"> Submit </button>
+  </div>
+</div>
+
+<div id="commModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <label for="usr">New Comment</label>
+    <input type="text" class="form-control" id="new_comm">
+    <button type="button" class="btn btn-primary"  id="submit_comm"> Submit </button>
+  </div>
+</div>
+
+<script>
+var modal = document.getElementById('qtyModal');
+var span = document.getElementsByClassName("close")[0];
+var btn = document.getElementById("submit_qty");
+
+var modalComm = document.getElementById('commModal');
+var spanComm = document.getElementsByClassName("close")[1];
+var btnComm = document.getElementById("submit_comm");
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+spanComm.onclick = function() {
+  modalComm.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal ) {
+    modal.style.display = "none";
+  }
+  if (event.target == modalComm ) {
+    modalComm.style.display = "none";
+  }
+  if (event.target == modalAddr ) {
+    modalAddr.style.display = "none";
+  }
+}
+
+$('.edit').on("click",function(){
+  var rest_id=  $(this).attr('rest_id');
+  var item_id=  $(this).attr('item_id');
+  var menue_type=  $(this).attr('menue_type');
+  var config_id=  $(this).attr('config_id');
+  console.log(config_id);
+  modal.style.display = "block";
+
+  btn.onclick = function() {
+    var qty = document.getElementById("new_qty").value;
+    modal.style.display = "none";
+    $.ajax({
+      type: "GET",
+      contentType: 'application/json',
+      url: `http://localhost:3000/editQty?config_id=${config_id}&item_id=${item_id}&rest_id=${rest_id}&menue_type=${menue_type}&qty=${qty}`,
+      success: function(data){
+        console.log(data);
+        if(data.status == 1){
+            location.reload();
+        }
+        else {
+          console.log('error rem');
+        }
+      }
+    });
+  }
+});
+
+$('.edit_comm').on("click",function(){
+  var rest_id=  $(this).attr('rest_id');
+  var item_id=  $(this).attr('item_id');
+  var menue_type=  $(this).attr('menue_type');
+  var config_id=  $(this).attr('config_id');
+
+  modalComm.style.display = "block";
+
+  btnComm.onclick = function() {
+    var comm = document.getElementById("new_comm").value;
+    modalComm.style.display = "none";
+    $.ajax({
+      type: "GET",
+      contentType: 'application/json',
+      url: `http://localhost:3000/editComm?config_id=${config_id}&item_id=${item_id}&rest_id=${rest_id}&menue_type=${menue_type}&comm=${comm}`,
+      success: function(data){
+        console.log(data);
+        if(data.status == 1){
+            location.reload();
+        }
+        else {
+          console.log('error edit');
+        }
+      }
+    });
+  }
+});
+</script>
+
+<div id="addrModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <label for="usr">Address</label>
+    <select class="form-control" id="sel1">
+      {{#if addr}}
+      {{#each addr}}
+      <option charge={{this.charge}} addr_id={{this.id}}> {{this.city}} ,  {{this.district}} , {{this.street_name}} , {{this.apt_no}}</option>
+      {{/each}}
+      {{else}}
+      <option> The restaurant doesn't deliver to your area!</option>
+      {{/if}}
+    </select>
+    <label for="usr">Discount Code ? </label>
+    <input type="text" class="form-control" id="code">
+    <button type="button" class="btn btn-primary"  id="submit_addr"> Submit </button>
+  </div>
+</div>
+<script>
+var btnCheckout = document.getElementById("checkout");
+
+
+var modalAddr = document.getElementById('addrModal');
+var spanAddr = document.getElementsByClassName("close")[2];
+var btnAddr = document.getElementById("submit_addr");
+
+spanAddr.onclick = function() {
+  modalAddr.style.display = "none";
+}
+
+
+btnCheckout.onclick = function() {
+
+    modalAddr.style.display = "block";
+
+    btnAddr.onclick = function() {
+      var e = document.getElementById("sel1");
+      var option= e.options[e.selectedIndex];
+      var user_address = option.getAttribute("addr_id");
+      var charge = option.getAttribute("charge");
+      var addr = document.getElementById("sel1").value;
+      var code = document.getElementById("code").value;
+      modalAddr.style.display = "none";
+      window.location.href = `http://localhost:3000/checkoutOrder?code=${code}&addr=${addr}&charge=${charge}&user_address=${user_address}`;
+    }
+}
+</script>

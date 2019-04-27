@@ -1,0 +1,123 @@
+<link rel="stylesheet" type="text/css" href="../public/table.css">
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<h1>{{ title }}</h1>
+<p> List of {{ title }} </p>
+<button type="button" class="btn btn-primary" id="add">Add {{title}}</button>
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Add {{title}}</h3>
+    <div class="form-group">
+          <label for="usr">District</label>
+          <select class="form-control" id="sel1">
+            {{#each district}}
+            <option>{{this.district}}</option>
+            {{/each}}
+          </select>
+          <label for="usr">Charge</label>
+          <input type="text" class="form-control" id="charge">
+    </div>
+
+    <button type="button" class="btn btn-primary"  id="submit_rest"> Submit </button>
+  </div>
+
+</div>
+
+<div id="editModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" id="closeEdit">&times;</span>
+    <h3>Edit {{title}}</h3>
+    <div class="form-group">
+          <label for="usr">Charge</label>
+          <input type="text" id="new_charge">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_edit"> Submit </button>
+  </div>
+
+</div>
+
+<div class="list">
+<div class="invoice-table">
+  <table style="width:100%">
+ 		   	 <tr>
+    			<th></th>
+    			<th>CITY</th>
+          <th>CHARGE</th>
+          <th>ACTION</th>
+  			</tr>
+        {{#each list}}
+  			<tr>
+    			<td>
+    				<div class="left"> <p>{{@index}}</p></div>
+    				<div class = "right">
+    					<p id="item">AREA</p>
+    					<p>{{this.district}}</p>
+    				</div>
+    			</td>
+   				<td>{{this.city}}</td>
+          <td>{{this.charge}}</td>
+    			<td><a href="#" class='rem'  district={{this.district}} city={{this.city}}>REMOVE</a>
+              <a href="#" class='edit' district={{this.district}} city={{this.city}} rest_id ={{rest_id}} >Edit</a></td>
+  			</tr>
+        {{/each}}
+</table>
+</div>
+</div>
+<script>
+  $('.rem').on("click",function(){
+    var restId = {{this.rest_id}};
+    var district =  $(this).attr('district');
+    var city = $(this).attr('city');
+    console.log(restId);
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/removeDel?restId=${restId}&district=${district}&city=${city}`,
+    success: function(data){
+      console.log(data);
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error deleting');
+    }
+  });
+});
+
+
+
+
+$('#submit_rest').on("click",function(){
+  var rest_id ={{rest_id}};
+  var areaInfo =  document.getElementById("sel1").value.split(" ");
+  var district = areaInfo[0];
+  var city = areaInfo[1];
+  var charge = document.getElementById("charge").value;
+  console.log(rest_id);
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/addDel?rest_id='${rest_id}'&district='${district}'&city='${city}'&charge='${charge}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+
+
+</script>
+<script src="../jquery/modal.js"></script>
+<script src="../jquery/editDel.js"></script>
+<script>
+  $('.edit').on("click",function(){
+  areaInfo.rest_id = {{rest_id}};//$(this).attr('rest_id');
+  areaInfo.district = $(this).attr('district');
+  areaInfo.city = $(this).attr('city');
+  var editModal = document.getElementById('editModal');
+  editModal.style.display = "block";
+});
+</script>

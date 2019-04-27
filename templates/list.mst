@@ -1,0 +1,10 @@
+<script type="text/template">
+  {{#list.length}}
+  <h1>{{header}}</h1>
+  <div class="list">
+    {{list}}
+      <li>{{.}}</li>
+    {{/list}}
+  </div>
+  {{/list.length}}
+</script>

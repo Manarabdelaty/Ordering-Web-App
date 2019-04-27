@@ -1,0 +1,57 @@
+.list{
+  float: center;
+	width: 85%;
+	min-height:  100%;
+	margin:auto;
+	overflow: hidden;
+	background-color: #F8F8F8;
+	padding-left: 28px;
+  padding-right: 28px;
+}
+.invoice-table table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.invoice-table td, th {
+    text-align: left;
+    padding: 10px;
+    border:none;
+
+}
+
+.invoice-table tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.square{
+      width: 20%;
+      height: 80%;
+      background: red;
+}
+.left{
+	float: left;
+	width: 10%;
+	background-color:  #888888;
+	overflow: hidden;
+	padding-right: 2px;
+	text-align: center;
+	color: #ffffff;
+}
+.right {
+	float: right;
+	width: 70%;
+
+}
+.right p{
+	padding: 0;
+	margin:0;
+}
+#item{
+	font-weight: bold;
+	color: #505050;
+	text-transform: uppercase;
+}

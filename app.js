@@ -1,5 +1,13 @@
 var app = require('./routes/index');
-
 var port = require('./db/config').port;
+var hbs = require('express-handlebars');
+var path = require('path');
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+// handlebars view engine setup
+app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir:__dirname + '/views/layout'}));
+app.set('views', path.join(__dirname, '/views/layout'));
+app.set('view engine', 'hbs');
+
+
+
+app.listen(port, () => console.log(`App listening on port ${port}!`));

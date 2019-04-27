@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+<body onload="loadUser()">
+<div id="target">Loading...</div>
+  <script id="template" type="x-tmpl-mustache">
+    Hello {{ name }}!
+  </script>
+</body>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script>
+  function loadUser() {
+    console.log('here');
+    var template = $('#template').html();
+    Mustache.parse(template);   // optional, speeds up future uses
+    var rendered = Mustache.render(template, {name: "Luke"});
+    $('#target').html(rendered);
+  }
+</script>
+</html>

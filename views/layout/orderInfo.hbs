@@ -1,0 +1,144 @@
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<table class="table">
+    <tbody>
+      <tr>
+        <th> Restaurant</th>
+          <td>{{rest}}</td>
+      </tr>
+      <tr>
+        <th> Phone </th>
+          <td>{{phone_no}}</td>
+      </tr>
+        <tr>
+          <th> Status</th>
+            <td>{{status}}</td>
+            <td><a class="update" href="#">Update</a></td>
+        </tr>
+        <tr>
+          <th>Total</th>
+            <td>{{total}}</td>
+        </tr>
+        <tr>
+          <th>Deliver To</th>
+            <td>{{address}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3> Items</h3>
+<table class="table">
+    <tbody>
+        {{#each items}}
+        <tr>
+          <th>Item {{@index}}</th>
+            <td>{{this.item_name}} , {{this.config_name}}</td>
+            <th>Comment</th>
+            <td>{{this.comment}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<a class='cancel' href="#">Cancel Order</a>
+
+<div id="cancelModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Are you sure?</h3>
+    <button type="button" class="btn btn-primary"  id="submit_cancel"> Confirm </button>
+  </div>
+</div>
+
+
+<div id="updateModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>New Status </h3>
+    <select class="form-control" id="sel1">
+      <option>Delivered</option>
+      <option>Out for Delivery</option>
+      <option>Preparing</option>
+      <option>Received</option>
+    </select>
+    <button type="button" class="btn btn-primary"  id="submit_update"> Submit </button>
+  </div>
+</div>
+
+<script>
+var cancelModal = document.getElementById('cancelModal');
+var spanCancel = document.getElementsByClassName("close")[0];
+
+$('.cancel').on("click",function(){
+  cancelModal.style.display = "block";
+  console.log('hereeeeeee');
+});
+
+spanCancel.onclick = function() {
+  cancelModal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == cancelModal) {
+    cancelModal.style.display = "none";
+  }
+}
+
+
+
+$('#submit_cancel').on("click",function(){
+  console.log('here');
+  var order_id = {{order_id}};
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/cancelOrder?order_id='${order_id}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+
+</script>
+
+<script>
+var updateModal = document.getElementById('updateModal');
+var spanUpdate = document.getElementsByClassName("close")[1];
+
+$('.update').on("click",function(){
+  updateModal.style.display = "block";
+  console.log('hereeeeeee');
+});
+
+spanUpdate.onclick = function() {
+  updateModal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == updateModal) {
+    updateModal.style.display = "none";
+  }
+}
+
+
+
+$('#submit_update').on("click",function(){
+  console.log('here');
+  var order_id = {{order_id}};
+  var status =  document.getElementById("sel1").value;
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/updateStatus?order_id='${order_id}'&status='${status}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+
+</script>

@@ -1,0 +1,36 @@
+<link rel="stylesheet" type="text/css" href="/public/form.css">
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<div class="login-page">
+  <div class="form">
+    <form class="login-form">
+      <input type="text" placeholder="username" id = "user_email"/>
+      <input type="password" placeholder="password" id ="user_pass"/>
+      <button id= "login_btn" type="button">login</button>
+
+      <p class="message">Not registered? <a href="http://localhost:3000/register">Create an account</a></p>
+      <p class="message">Forgot password? <a href="http://localhost:3000/forgot">Send on email</a></p>
+
+    </form>
+  </div>
+  <script>
+    $( "#login_btn" ).click(function() {
+      console.log("called");
+      var data = {};
+      data.email = document.getElementById("user_email").value;
+      data.password =  document.getElementById("user_pass").value;
+      $.ajax({
+        type: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        url: 'http://localhost:3000/login',
+        success: function(data) {
+            console.log('success');
+            console.log(JSON.stringify(data));
+            if (data.status == 1)
+                window.location.href = "http://localhost:3000/";
+          }
+      });
+
+    });
+  </script>
+</div>

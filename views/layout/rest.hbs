@@ -1,0 +1,164 @@
+<link rel="stylesheet" type="text/css" href="../public/table.css">
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<h1>{{ title }}</h1>
+<p> List of {{ title }} </p>
+<button type="button" class="btn btn-primary" id="add">Add {{title}}</button>
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Add {{title}}</h3>
+    <div class="form-group">
+          <label for="usr">Name:</label>
+          <input type="text" class="form-control" id="name">
+          <label for="sel1">Cuisine:</label>
+          <select class="form-control" id="sel1">
+            {{#each cuisine}}
+            <option>{{this.name}}</option>
+            {{/each}}
+          </select>
+          <label for="usr">Phone Number:</label>
+          <input type="text" class="form-control" id="phone">
+          <label for="usr">Opening Hour:</label>
+          <input type="time"  id="opening_hr">
+          <label for="usr">Close Hour:</label>
+          <input type="time" id="close_hr">
+    </div>
+
+    <button type="button" class="btn btn-primary"  id="submit_rest"> Submit </button>
+  </div>
+
+</div>
+
+<div id="editModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="closeEdit">&times;</span>
+    <h3>Edit {{title}}</h3>
+    <div class="form-group">
+          <label for="usr">Name:</label>
+          <input type="text" class="form-control" id="name">
+          <label for="sel1">Cuisine:</label>
+          <select class="form-control" id="sel1">
+            {{#each cuisine}}
+            <option>{{this.name}}</option>
+            {{/each}}
+          </select>
+          <label for="usr">Phone Number:</label>
+          <input type="text" class="form-control" id="phone">
+          <label for="usr">Opening Hour:</label>
+          <input type="time"  id="opening_hr">
+          <label for="usr">Close Hour:</label>
+          <input type="time" id="close_hr">
+    </div>
+
+    <button type="button" class="btn btn-primary"  id="submit_edit"> Submit </button>
+  </div>
+
+</div>
+
+<div class="list">
+<div class="invoice-table">
+  <table style="width:100%">
+ 		   	 <tr>
+    			<th></th>
+    			<th>CUISINE</th>
+          <th>OPEN HR</th>
+          <th>CLOSE HR</th>
+    			<th>PHONE</th>
+          <th>DEL AREA</th>
+          <th>DISCOUNTS</th>
+  			</tr>
+        {{#each list}}
+  			<tr>
+    			<td>
+    				<div class="left"> <p>{{@index}}</p></div>
+    				<div class = "right">
+    					<p id="item">NAME</p>
+    					<p><a href="http://localhost:3000/menuelist?restId={{this.id}}" >{{this.name}}</a></p>
+    				</div>
+    			</td>
+   				<td>{{this.cuisine}}</td>
+          <td>{{this.opening_hr}}</td>
+          <td>{{this.close_hr}}</td>
+          <td>{{this.phone_no}}</td>
+          <td><a href="http://localhost:3000/dellist?restId={{this.id}}">VIEW</a></td>
+          <td><a href="http://localhost:3000/restDisc?restId={{this.id}}">VIEW</a></td>
+
+    			<td><a href="#" class='rem' value={{this.id}}>REMOVE</a>
+              <a href="http://localhost:3000/editRest?rest_id={{this.id}}&cuisine={{this.cuisine}}&close_hr={{this.close_hr}}&open_hr={{this.opening_hr}}&phone_no={{this.phone_no}}&name={{this.name}}" class='edit' value={{this.id}}>Edit</a></td>
+  			</tr>
+        {{/each}}
+</table>
+</div>
+</div>
+<script>
+  $('.rem').on("click",function(){
+    var restId = $(this).attr('value');
+    console.log(restId);
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/removeRest?id=${restId}`,
+    success: function(data){
+      console.log(data);
+      if(data.status == 1){
+            location.reload();
+      }
+      else {
+        console.log('error deleting');
+      }
+    }
+  });
+});
+
+
+$('.edit').on("click",function(){
+  var restId = $(this).attr('value');
+  var editModal = document.getElementById('editModal');
+
+//  editModal.style.display = "block";
+
+
+/*$.ajax({
+  type: "GET",
+  contentType: 'application/json',
+  url: `http://localhost:3000/markInvalid?cno=${cno}`,
+  success: function(data){
+    console.log(data);
+    if(data.status == 1){
+          //location.reload();
+    }
+    else {
+      console.log('error marking Invalid');
+    }
+  }
+});*/
+
+});
+
+
+$('#submit_rest').on("click",function(){
+  var name = document.getElementById("name").value;
+  var open_hr = document.getElementById("opening_hr").value;
+  var close_hr = document.getElementById("close_hr").value;
+  var phone = document.getElementById("phone").value;
+  var cuisine = document.getElementById("sel1").value;
+  console.log(open_hr);
+  console.log(close_hr);
+  console.log(cuisine);
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/addRest?name='${name}'&opening_hr='${open_hr}'&close_hr='${close_hr}'&phone='${phone}'&cuisine='${cuisine}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+</script>
+<script src="../jquery/modal.js"></script>
+<script src="../jquery/editModal.js"></script>

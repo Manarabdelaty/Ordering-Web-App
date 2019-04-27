@@ -1,0 +1,135 @@
+<link rel="stylesheet" type="text/css" href="../public/table.css">
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<h1>Menue Items List</h1>
+<div class="list">
+<div class="invoice-table">
+  <table style="width:100%">
+ 		   	 <tr>
+    			<th></th>
+          <th>PRICE</th>
+  			</tr>
+        {{#each list}}
+  			<tr>
+    			<td>
+    				<div class="left"> <p>{{@index}}</p></div>
+    				<div class = "right">
+    					<p id="item">ITEM</p>
+    					<p><a href="#"> {{this.name}}</a></p>
+    				</div>
+    			</td>
+          <td>{{this.price}}</td>
+    			<td><a href="#" class='add' index={{@index}} config_id={{this.id}} item_id={{this.item_id}} rest_id={{this.rest_id}} menue_type={{this.menue_type}} price ={{this.price}} name='{{this.name}}'>Add to Cart</a>
+          </td>
+  			</tr>
+        {{/each}}
+</table>
+
+
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Added Successfully</h3>
+  </div>
+</div>
+
+<div id="errorModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Item is in Cart!</h3>
+  </div>
+</div>
+
+<div id="qtyModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <label for="usr">Quantity</label>
+    <input type="text" class="form-control" id="qty">
+    <label for="usr">Comment</label>
+    <input type="text" class="form-control" id="comment">
+    <button type="button" class="btn btn-primary"  id="submit_qty"> Submit </button>
+  </div>
+</div>
+
+
+<script>
+
+
+$(document).ready(function() {
+
+});
+</script>
+
+<script>
+
+var modal = document.getElementById('myModal');
+var span = document.getElementsByClassName("close")[0];
+
+var modalQty = document.getElementById('qtyModal');
+var spanQty = document.getElementsByClassName("close")[1];
+var btn = document.getElementById("submit_qty");
+
+var errorModal = document.getElementById('errorModal');
+var errorSpan = document.getElementsByClassName("close")[2];
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+spanQty.onclick = function() {
+  modalQty.style.display = "none";
+}
+errorSpan.onclick = function() {
+  errorModal.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == modal ) {
+    modal.style.display = "none";
+  }
+  if (event.target == modalQty ) {
+    modalQty.style.display = "none";
+  }
+  if (event.target == errorModal ) {
+    errorModal.style.display = "none";
+  }
+}
+  $('.add').on("click",function(){
+    var rest_id=  $(this).attr('rest_id');
+    var item_id=  $(this).attr('item_id');
+    var menue_type=  $(this).attr('menue_type');
+    var price=  $(this).attr('price');
+    var name=  $(this).attr('name');
+    var id=  $(this).attr('config_id');
+
+
+    console.log(name);
+    console.log('pressed add');
+    modalQty.style.display = "block";
+    btn.onclick = function() {
+      console.log('pressed submit');
+      modalQty.style.display = "none";
+      var qty=  document.getElementById("qty").value;
+      var comment=  document.getElementById("comment").value;
+
+      $.ajax({
+        type: "GET",
+        contentType: 'application/json',
+        url: `http://localhost:3000/addToCart?id=${id}&item_id=${item_id}&rest_id=${rest_id}&menue_type=${menue_type}&price=${price}&name=${name}&qty=${qty}&comment=${comment}`,
+        success: function(data){
+          console.log(data);
+          if(data.status == 1){
+            console.log('called add to cart');
+            modal.style.display = "block";
+          }
+          else {
+            console.log('error adding');
+            errorModal.style.display = "block";
+          }
+        }
+      });
+    }
+
+
+  });
+</script>

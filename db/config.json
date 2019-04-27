@@ -1,8 +1,9 @@
 {
   "db": {
     "host": "localhost",
-    "user": "",
-    "password": ""
+    "user": "root",
+    "password": "",
+    "database": "yummyapp"
   },
   "port": "3000"
 }

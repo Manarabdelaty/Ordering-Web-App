@@ -1,0 +1,33 @@
+<h3>Home</h3>
+
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filter By Area
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    {{#each area}}
+      <li><a href="http://localhost:3000/filterByArea?areaInfo={{this.district}}">{{this.district}}</a></li>
+    {{/each}}
+  </ul>
+</div>
+
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filter By Cuisine
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    {{#each cuisine}}
+      <li><a href="http://localhost:3000/filterByCuisine?cuisine={{this.name}}">{{this.name}}</a></li>
+    {{/each}}
+  </ul>
+</div>
+
+
+<table class="table">
+  <tbody>
+      {{#each rest}}
+      <tr>
+        <th><a href="http://localhost:3000/getMenue?rest_id={{this.id}}">{{this.name}}</a></th>
+          <td> </td>
+      </tr>
+      {{/each}}
+  </tbody>
+</table>

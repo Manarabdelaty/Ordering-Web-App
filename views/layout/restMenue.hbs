@@ -1,0 +1,22 @@
+<h3> Restaurant Menues</h3>
+
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">View
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+      <li><a href="http://localhost:3000/viewActive?rest_id={{this.rest_id}}">Active</a></li>
+      <li><a href="http://localhost:3000/getMenue?rest_id={{this.rest_id}}">All</a></li>
+  </ul>
+</div>
+
+
+<table class="table">
+  <tbody>
+      {{#each list}}
+      <tr>
+        <th><a href="http://localhost:3000/getItem?rest_id={{this.rest_id}}&menue_type='{{this.name}}'">{{this.name}}</a></th>
+          <td> </td>
+      </tr>
+      {{/each}}
+  </tbody>
+</table>

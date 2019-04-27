@@ -1,0 +1,120 @@
+<link rel="stylesheet" type="text/css" href="../public/table.css">
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<h1>{{ title }}</h1>
+<p> List of {{ title }} </p>
+<button type="button" class="btn btn-primary" id="add">Add {{title}}</button>
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Add {{title}}</h3>
+    <div class="form-group">
+          <label for="usr">Start Date</label>
+          <input type="datetime-local" class="form-control" id="start_date">
+          <label for="usr">End Date</label>
+          <input type="datetime-local" class="form-control" id="end_date">
+          <label for="usr">Amount</label>
+          <input type="text" class="form-control" id="amount">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_disc"> Submit </button>
+  </div>
+
+</div>
+
+<div id="editModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" id="closeEdit">&times;</span>
+    <h3>Edit {{title}}</h3>
+    <div class="form-group">
+          <label for="usr">Amount</label>
+          <input type="text" id="new_charge">
+          <label for="usr">Start Date</label>
+          <input type="text" id="new_charge">
+          <label for="usr">End Date</label>
+          <input type="text" id="new_charge">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_edit"> Submit </button>
+  </div>
+</div>
+
+<div class="list">
+<div class="invoice-table">
+  <table style="width:100%">
+ 		   	 <tr>
+    			<th></th>
+    			<th>START DATE</th>
+          <th>END DATE</th>
+          <th>AMOUNT</th>
+          <th>ACTION </th>
+  			</tr>
+        {{#each list}}
+  			<tr>
+    			<td>
+    				<div class="left"> <p>{{@index}}</p></div>
+    				<div class = "right">
+    					<p id="item">DISC</p>
+    					<p>{{this.district}}</p>
+    				</div>
+    			</td>
+   				<td>{{this.start_date}}</td>
+          <td>{{this.end_date}}</td>
+          <td> {{this.amount}} </td>
+    			<td><a href="#" class='rem'  disc_id={{this.id}}>REMOVE</a>
+              <a href="#" class='edit' disc_id={{this.id}}>Edit</a></td>
+  			</tr>
+        {{/each}}
+</table>
+</div>
+</div>
+<script>
+  $('.rem').on("click",function(){
+    var discId = $(this).attr('disc_id');
+    console.log(discId);
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/removeRestDisc?disc_id=${discId}`,
+    success: function(data){
+      console.log(data);
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error deleting');
+    }
+  });
+});
+
+
+$('#submit_disc').on("click",function(){
+  var rest_id = {{rest_id}};
+  var start_date = document.getElementById("start_date").value;
+  var end_date =  document.getElementById("end_date").value;
+  var amount = document.getElementById("amount").value;
+
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/addRestDisc?rest_id='${rest_id}'&start_date='${start_date}'&end_date='${end_date}'&amount=${amount}`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+
+
+</script>
+<script src="../jquery/modal.js"></script>
+<script src="../jquery/editDel.js"></script>
+<script>
+  $('.edit').on("click",function(){
+  areaInfo.rest_id = {{rest_id}};//$(this).attr('rest_id');
+  areaInfo.district = $(this).attr('district');
+  areaInfo.city = $(this).attr('city');
+  var editModal = document.getElementById('editModal');
+  editModal.style.display = "block";
+});
+</script>

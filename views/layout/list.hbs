@@ -1,0 +1,135 @@
+<link rel="stylesheet" type="text/css" href="../public/table.css">
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<h1>{{ title }}</h1>
+<p> List of {{ title }} </p>
+<button type="button" class="btn btn-primary" id="add">Add {{title}}</button>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Add {{title}}</h3>
+    <div class="form-group">
+          <label for="usr">email:</label>
+          <input type="text" class="form-control" id="email">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit"> Submit </button>
+  </div>
+</div>
+
+<div id="passModal" class="modal">
+<!-- Modal two content -->
+<div class="modal-content">
+  <span class="closePass">&times;</span>
+  <h3>Change Password</h3>
+  <div class="form-group">
+        <label for="usr">New Password:</label>
+        <input type="password" class="form-control" id="pass">
+        <label for="usr">Confirm Password:</label>
+        <input type="password" class="form-control" id="passtwo">
+  </div>
+  <button type="button" class="btn btn-primary"  id="submit_pass"> Submit </button>
+</div>
+</div>
+
+<div class="list">
+<div class="invoice-table">
+  <table style="width:100%">
+ 		   	 <tr>
+    			<th></th>
+    			<th>EMAIL</th>
+    			<th>ACTION</th>
+  			</tr>
+        {{#each list}}
+  			<tr>
+    			<td>
+    				<div class="left"> <p>{{@index}}</p></div>
+    				<div class = "right">
+    					<p id="item">ADMIN</p>
+    					<p>{{this.name}}</p>
+    				</div>
+    			</td>
+   				<td>{{this.email}}</td>
+    			<td><a href="#" class='rem' value={{this.id}}>REMOVE</a> <a href="#" class='cp' value={{this.id}}>Change Pass</a></td>
+  			</tr>
+        {{/each}}
+</table>
+</div>
+</div>
+<script>
+  $('.rem').on("click",function(){
+    var userId = $(this).attr('value');
+    var prev_role = '{{title}}';
+    console.log(userId);
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/remove?id=${userId}&prev_role={{title}}`,
+    success: function(data){
+      console.log(data);
+      if(data.status == 1){
+            location.reload();
+      }
+      else {
+        console.log('error deleting');
+      }
+    }
+  });
+});
+
+
+$('#submit').on("click",function(){
+  var email = document.getElementById("email").value;
+  var listName = '{{title}}';
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/add${listName}?email=${email}`,
+    success: function(data){
+      if(data.status == 1){
+          location.reload();
+      }
+      else {
+        errorModal.style.display = "block";
+        modal.style.display = "none";
+        console.log('error adding');
+      }
+    }
+  });
+});
+</script>
+<div id="errorModal" class="modal">
+<!-- Modal two content -->
+<div class="modal-content">
+  <span class="close">&times;</span>
+  <h3>User is already on the List</h3>
+</div>
+</div>
+
+<div id="changedModal" class="modal">
+<!-- Modal two content -->
+<div class="modal-content">
+  <span class="close">&times;</span>
+  <h3>Updated !</h3>
+</div>
+</div>
+
+<script>
+// Get the modal
+var errorModal = document.getElementById('errorModal');
+var errorSpan = document.getElementsByClassName("close")[1];
+
+var changedModal = document.getElementById('changedModal');
+var changedSpan = document.getElementsByClassName("close")[2];
+
+// When the user clicks on <span> (x), close the modal
+errorSpan.onclick = function() {
+  errorModal.style.display = "none";
+}
+// When the user clicks on <span> (x), close the modal
+changedSpan.onclick = function() {
+  changedModal.style.display = "none";
+}
+</script>
+<script src="../jquery/modal.js"></script>
+<script src="../jquery/changePass.js"></script>

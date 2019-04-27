@@ -1,0 +1,56 @@
+<h3>Order Checkout</h3>
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Items Total</th>
+            <td>{{item_total}}</td>
+        </tr>
+        <tr>
+          <th>Tax</th>
+            <td>{{tax}}</td>
+        </tr>
+        <tr>
+          <th>Delievery Charge</th>
+            <td>{{charge}}</td>
+        </tr>
+        <tr>
+          <th>Restuarant Discount</th>
+            <td>{{rest_disc}}</td>
+        </tr>
+        <tr>
+          <th>Discount</th>
+            <td>{{discount}}</td>
+        </tr>
+        <tr>
+          <th>Total</th>
+            <td>{{total}}</td>
+        </tr>
+
+    </tbody>
+</table>
+<button type="button" class="btn btn-primary"  id="place">Place Order</button>
+<script>
+  var btnCheckout = document.getElementById("place");
+
+  btnCheckout.onclick = function() {
+
+    var total = {{total}};
+    var user_address = {{user_address}};
+    var status = 'processing';
+
+    $.ajax({
+      type: "GET",
+      contentType: 'application/json',
+      url: `http://localhost:3000/place?user_address=${user_address}&total=${total}&status=${status}`,
+      success: function(data){
+        console.log(data);
+        if(data.status == 1){
+          //  location.reload();
+        }
+        else {
+          console.log('error edit');
+        }
+      }
+    });
+  }
+</script>

@@ -1,0 +1,21 @@
+<link rel="stylesheet" type="text/css" href="../public/table.css">
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<h1>Menue Items List</h1>
+<div class="list">
+<div class="invoice-table">
+  <table style="width:100%">
+ 		   	 <tr>
+    			<th></th>
+  			</tr>
+        {{#each list}}
+  			<tr>
+    			<td>
+    				<div class="left"> <p>{{@index}}</p></div>
+    				<div class = "right">
+    					<p id="item">ITEM</p>
+    					<p><a href="http://localhost:3000/getItemConfig?item_id={{this.item_id}}&rest_id={{this.rest_id}}&menue_type={{this.menue_type}}"> {{this.name}}</a></p>
+    				</div>
+    			</td>
+  			</tr>
+        {{/each}}
+</table>

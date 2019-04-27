@@ -1,0 +1,273 @@
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<h3> Profile</h3>
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Edit</h3>
+    <div class="form-group">
+          <label for="usr">Name</label>
+          <input type="text" class="form-control" id="name">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_name"> Submit </button>
+  </div>
+</div>
+
+<div id="ageModal" class="modal">
+  <div class="modal-content">
+    <span class="closeAge">&times;</span>
+    <h3>Edit</h3>
+    <div class="form-group">
+          <label for="usr">Birth Date</label>
+          <input type="datetime-local" class="form-control" id="bdate">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_age"> Submit </button>
+  </div>
+</div>
+
+<div id="addrModal" class="modal">
+  <div class="modal-content">
+    <span class="closeAddr">&times;</span>
+    <h3>Edit</h3>
+    <div class="form-group">
+          <label for="usr">Street Name</label>
+          <input type="text" class="form-control" id="street">
+          <label for="usr">Apt No</label>
+          <input type="text" class="form-control" id="apt">
+          <label for="usr">District</label>
+          <select class="form-control" id="sel1">
+            {{#each area}}
+            <option>{{this.district}}</option>
+            {{/each}}
+          </select>
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_addr"> Submit </button>
+  </div>
+</div>
+
+<div id="newaddrModal" class="modal">
+  <div class="modal-content">
+    <span class="closenewAddr">&times;</span>
+    <h3>Edit</h3>
+    <div class="form-group">
+          <label for="usr">Street Name</label>
+          <input type="text" class="form-control" id="new_street">
+          <label for="usr">Apt No</label>
+          <input type="text" class="form-control" id="new_apt">
+          <label for="usr">District</label>
+          <select class="form-control" id="new_sel1">
+            {{#each area}}
+            <option>{{this.district}}</option>
+            {{/each}}
+          </select>
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_new_addr"> Submit </button>
+  </div>
+</div>
+
+<table class="table">
+    <tbody>
+        <tr>
+          <th> Name</th>
+            <td>{{name}}</td>
+            <td><a class="edit">Edit</a></td>
+        </tr>
+        <tr>
+          <th>Age</th>
+            <td>{{age}}</td>
+            <td><a class="edit_age">Edit</a></td>
+        </tr>
+        <tr>
+          <th>Email</th>
+            <td>{{email}}</td>
+        </tr>
+
+    </tbody>
+</table>
+
+
+<h3> Addresses</h3>
+<a class='add_addr'>Add New Address</a>
+
+<table class="table">
+    <tbody>
+        {{#each address}}
+        <tr>
+          <th>Address {{@index}}</th>
+            <td>{{this.city}} , {{this.district}} , {{this.street_name}} , {{this.apt_no}}</td>
+            <td class='edit_addr' addr_id={{this.id}}><a>Edit</a> </td>
+             <td class='rem' addr_id={{this.id}}> <a>Remove</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<script>
+var modal = document.getElementById('myModal');
+var span = document.getElementsByClassName("close")[0];
+
+$('.edit').on("click",function(){
+  modal.style.display = "block";
+});
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+$('#submit_name').on("click",function(){
+  var name = document.getElementById("name").value;
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/updateName?name=${name}`,
+    success: function(data){
+      if(data.status == 1)
+        location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+
+</script>
+<script>
+var agemodal = document.getElementById('ageModal');
+var spanAge = document.getElementsByClassName("closeAge")[0];
+
+$('.edit_age').on("click",function(){
+  agemodal.style.display = "block";
+});
+spanAge.onclick = function() {
+  agemodal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    agemodal.style.display = "none";
+  }
+}
+$('#submit_age').on("click",function(){
+  var bdate = document.getElementById("bdate").value;
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/updateAge?bdate=${bdate}`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+</script>
+
+<script>
+var addrModal = document.getElementById('addrModal');
+var spanAddr = document.getElementsByClassName("closeAddr")[0];
+var addr_id;
+
+$('.edit_addr').on("click",function(){
+  addrModal.style.display = "block";
+  addr_id = $(this).attr('addr_id');
+});
+spanAddr.onclick = function() {
+  addrModal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    addrModal.style.display = "none";
+  }
+}
+
+
+$('#submit_addr').on("click",function(){
+  var areaInfo =  document.getElementById("sel1").value.split(" ");
+  var district = areaInfo[0];
+  var city = areaInfo[1];
+  var apt_no = document.getElementById("apt").value;
+  var street_name = document.getElementById("street").value;
+
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/updateAddr?street_name='${street_name}'&district='${district}'&city='${city}'&apt_no='${apt_no}'&addr_id='${addr_id}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+
+</script>
+
+<script>
+var add_addrModal = document.getElementById('newaddrModal');
+var spanAdd_addr = document.getElementsByClassName("closenewAddr")[0];
+
+$('.add_addr').on("click",function(){
+  add_addrModal.style.display = "block";
+  console.log('hereeeeeee');
+});
+spanAdd_addr.onclick = function() {
+  add_addrModal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    add_addrModal.style.display = "none";
+  }
+}
+
+
+$('#submit_new_addr').on("click",function(){
+  var areaInfo =  document.getElementById("new_sel1").value.split(" ");
+  var district = areaInfo[0];
+  var city = areaInfo[1];
+  var apt_no = document.getElementById("new_apt").value;
+  var street_name = document.getElementById("new_street").value;
+  console.log('here');
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/addAddr?street_name='${street_name}'&district='${district}'&city='${city}'&apt_no='${apt_no}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+
+</script>
+
+<script>
+
+
+$('.rem').on("click",function(){
+  var addr_id= $(this).attr('addr_id');
+
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/removeAddr?addr_id='${addr_id}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+
+</script>
+
+<a href="http://localhost:3000/changeMyPass">Change My Password</a>

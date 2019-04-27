@@ -1,0 +1,365 @@
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<h3> Edit Restuarant Info</h3>
+<table class="table">
+    <tbody>
+        <tr>
+          <th> Name</th>
+            <td>{{name}}</td>
+            <td><a href="#" class="edit_name">Edit</a></td>
+        </tr>
+        <tr>
+          <th>Cuisine</th>
+            <td>{{cuisine}}</td>
+            <td><a href="#" class="edit_cuisine">Edit</a></td>
+        </tr>
+        <tr>
+          <th>Phone Number</th>
+            <td>{{phone}}</td>
+            <td><a href="#" class="edit_phone">Edit</a></td>
+        </tr>
+        <tr>
+          <th>Open Hour</th>
+            <td>{{open_hr}}</td>
+            <td><a href="#" class="edit_open_hr">Edit</a></td>
+        </tr>
+        <tr>
+          <th>Close Hour</th>
+            <td>{{close_hr}}</td>
+            <td><a href="#" class="edit_close_hr">Edit</a></td>
+        </tr>
+        <tr>
+          <th>Street Name</th>
+            <td>{{street_name}}</td>
+            <td><a href="#" class="edit_street_name">Edit</a></td>
+        </tr>
+        <tr>
+          <th>Area</th>
+            <td>{{district}}, {{city}}</td>
+            <td><a href="#" class="edit_addr">Edit</a></td>
+        </tr>
+    </tbody>
+</table>
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Edit</h3>
+    <div class="form-group">
+          <label for="usr">Name</label>
+          <input type="text" class="form-control" id="name">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_name"> Submit </button>
+  </div>
+</div>
+
+<script>
+var nameModal = document.getElementById('myModal');
+var span = document.getElementsByClassName("close")[0];
+span.onclick = function() {
+  nameModal.style.display = "none";
+}
+
+$('.edit_name').on("click",function(){
+  nameModal.style.display= "block";
+});
+
+$('#submit_name').on("click",function(){
+  var name = document.getElementById('name').value;
+  var rest_id = {{rest_id}};
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/editName?name='${name}'&rest_id=${rest_id}`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+</script>
+
+
+<div id="open_hrModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Edit</h3>
+    <div class="form-group">
+          <label for="usr">opening Hour</label>
+          <input type="time" class="form-control" id="open_hr">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_open_hr"> Submit </button>
+  </div>
+</div>
+
+<script>
+var open_hrModal = document.getElementById('open_hrModal');
+var spanOpen = document.getElementsByClassName("close")[1];
+
+spanOpen.onclick = function() {
+  open_hrModal.style.display = "none";
+}
+
+$('.edit_open_hr').on("click",function(){
+  open_hrModal.style.display= "block";
+});
+
+$('#submit_open_hr').on("click",function(){
+  var open_hr = document.getElementById('open_hr').value;
+  var rest_id = {{rest_id}};
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/editOpenHr?rest_id=${rest_id}&open_hr='${open_hr}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+
+</script>
+
+<div id="close_hrModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Edit</h3>
+    <div class="form-group">
+          <label for="usr">Closing Hour</label>
+          <input type="time" class="form-control" id="close_hr">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_close_hr"> Submit </button>
+  </div>
+</div>
+
+<script>
+var close_hrModal = document.getElementById('close_hrModal');
+var spanClose = document.getElementsByClassName("close")[2];
+
+spanClose.onclick = function() {
+  close_hrModal.style.display = "none";
+}
+$('.edit_close_hr').on("click",function(){
+  close_hrModal.style.display= "block";
+});
+
+$('#submit_close_hr').on("click",function(){
+  var close_hr = document.getElementById('close_hr').value;
+  var rest_id = {{rest_id}};
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/editCloseHr?rest_id=${rest_id}&close_hr='${close_hr}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+
+</script>
+
+<div id="phoneModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Edit</h3>
+    <div class="form-group">
+          <label for="usr">Phone Number</label>
+          <input type="text" class="form-control" id="phone_no">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_phone_no"> Submit </button>
+  </div>
+</div>
+
+<script>
+var phoneModal = document.getElementById('phoneModal');
+var spanPhone = document.getElementsByClassName("close")[3];
+
+spanPhone.onclick = function() {
+  phoneModal.style.display = "none";
+}
+
+$('.edit_phone').on("click",function(){
+  phoneModal.style.display= "block";
+});
+
+$('#submit_phone_no').on("click",function(){
+  var phone_no = document.getElementById('phone_no').value;
+  var rest_id = {{rest_id}};
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/editPhone?rest_id=${rest_id}&phone_no=${phone_no}`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+</script>
+
+
+
+
+
+<div id="cuisineModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Edit</h3>
+    <div class="form-group">
+          <label for="usr">Cuisine</label>
+          <select class="form-control" id="cuisine">
+            {{#each cuisines}}
+            <option>{{this.name}}</option>
+            {{/each}}
+          </select>
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_cuisine"> Submit </button>
+  </div>
+</div>
+
+<script>
+var cuisineModal = document.getElementById('cuisineModal');
+var spanCuisine = document.getElementsByClassName("close")[4];
+
+spanCuisine.onclick = function() {
+  cuisineModal.style.display = "none";
+}
+
+$('.edit_cuisine').on("click",function(){
+  cuisineModal.style.display= "block";
+});
+
+$('#submit_cuisine').on("click",function(){
+  var cuisine = document.getElementById('cuisine').value;
+  var rest_id = {{rest_id}};
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/editCuisine?rest_id=${rest_id}&cuisine='${cuisine}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+</script>
+
+<div id="streetModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Edit</h3>
+    <div class="form-group">
+          <label for="usr">Street Name</label>
+          <input type="text" class="form-control" id="street_name">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_street_name"> Submit </button>
+  </div>
+</div>
+
+<script>
+var streetModal = document.getElementById('streetModal');
+var spanStreet = document.getElementsByClassName("close")[5];
+
+spanStreet.onclick = function() {
+  streetModal.style.display = "none";
+}
+
+$('.edit_street_name').on("click",function(){
+  streetModal.style.display= "block";
+});
+
+$('#submit_street_name').on("click",function(){
+  var street_name = document.getElementById('street_name').value;
+  var rest_id = {{rest_id}};
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/editStreet?rest_id=${rest_id}&street_name='${street_name}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+</script>
+
+<div id="addrModal" class="modal">
+  <div class="modal-content">
+    <span class="closeAddr">&times;</span>
+    <h3>Edit</h3>
+    <div class="form-group">
+          <label for="usr">District</label>
+          <select class="form-control" id="sel1">
+            {{#each area}}
+            <option>{{this.district}} {{this.city}}</option>
+            {{/each}}
+          </select>
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit_addr"> Submit </button>
+  </div>
+</div>
+
+<script>
+var addrModal = document.getElementById('addrModal');
+var spanAddr = document.getElementsByClassName("close")[5];
+
+spanAddr.onclick = function() {
+  addrModal.style.display = "none";
+}
+
+$('.edit_addr').on("click",function(){
+  addrModal.style.display= "block";
+});
+
+$('#submit_addr').on("click",function(){
+  var areaInfo =  document.getElementById("sel1").value.split(" ");
+  var district = areaInfo[0];
+  var city = areaInfo[1];
+  var rest_id = {{rest_id}};
+  console.log(city);
+  console.log(district);
+
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/editAddr?rest_id=${rest_id}&district='${district}'&city='${city}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+</script>
+
+<script>
+window.onclick = function(event) {
+  if (event.target == phoneModal) {
+    phoneModal.style.display = "none";
+  }
+  if (event.target == nameModal) {
+    nameModal.style.display = "none";
+  }
+  if (event.target == close_hrModal) {
+    close_hrModal.style.display = "none";
+  }
+  if (event.target == open_hrModal) {
+    open_hrModal.style.display = "none";
+  }
+  if (event.target == cuisineModal) {
+    cuisineModal.style.display = "none";
+  }
+}
+</script>

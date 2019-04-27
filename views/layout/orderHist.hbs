@@ -1,0 +1,28 @@
+<h3>Order History</h3>
+<link rel="stylesheet" type="text/css" href="../public/table.css">
+<div class="list">
+<div class="invoice-table">
+  <table style="width:100%">
+ 		   	 <tr>
+    			<th></th>
+    			<th>STATUS</th>
+          <th>TOTAL</th>
+    			<th>TIME</th>
+  			</tr>
+        {{#each list}}
+  			<tr>
+    			<td>
+    				<div class="left"> <p>{{@index}}</p></div>
+    				<div class = "right">
+    					<p id="item">ORDER</p>
+    					<p><a href="#"> {{@index}}</a></p>
+    				</div>
+    			</td>
+   				<td>{{this.status}}</td>
+          <td>{{this.total}}</td>
+          <td>{{this.time}}</td>
+  			</tr>
+        {{/each}}
+</table>
+</div>
+</div>

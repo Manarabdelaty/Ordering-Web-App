@@ -1,0 +1,29 @@
+<link rel="stylesheet" type="text/css" href="/public/form.css">
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<div class="login-page">
+  <div class="form">
+    <form class="login-form">
+      <input type="text" placeholder="email" id = "user_email"/>
+      <button id= "send" type="button">Send</button>
+      <p class="message">Not registered? <a href="http://localhost:3000/register">Create an account</a></p>
+    </form>
+  </div>
+  <script>
+    $( "#send" ).click(function() {
+      console.log("called");
+      var data = {};
+      data.email = document.getElementById("user_email").value;
+      $.ajax({
+        type: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        url: 'http://localhost:3000/forgot',
+        success: function(data) {
+            console.log('success');
+            console.log(JSON.stringify(data));
+          }
+      });
+
+    });
+  </script>
+</div>

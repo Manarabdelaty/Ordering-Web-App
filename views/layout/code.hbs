@@ -1,0 +1,147 @@
+<link rel="stylesheet" type="text/css" href="../public/table.css">
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<h1>{{ title }}</h1>
+<p> List of {{ title }} </p>
+<button type="button" class="btn btn-primary" id="add">Add {{title}}</button>
+<div id="codeModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="closeCode">&times;</span>
+    <h3>Add {{title}}</h3>
+    <div class="form-group">
+          <label for="usr">Percent:</label>
+          <input type="text" class="form-control" id="percent">
+          <label for="usr">Start Date:</label>
+          <input type="datetime-local"  id="start_date">
+          <label for="usr">End Date:</label>
+          <input type="datetime-local" id="end_date">
+    </div>
+
+    <button type="button" class="btn btn-primary"  id="submit"> Submit </button>
+  </div>
+</div>
+<div class="list">
+<div class="invoice-table">
+  <table style="width:100%">
+ 		   	 <tr>
+    			<th></th>
+    			<th>AMOUNT</th>
+          <th>START DATE</th>
+          <th>END DATE</th>
+    			<th>ACTION</th>
+  			</tr>
+        {{#each list}}
+  			<tr>
+    			<td>
+    				<div class="left"> <p>{{@index}}</p></div>
+    				<div class = "right">
+    					<p id="item">CODE</p>
+    					<p>{{this.cno}}</p>
+    				</div>
+    			</td>
+   				<td>{{this.percent}}</td>
+          <td>{{this.start}}</td>
+          <td>{{this.end}}</td>
+    			<td><a href="#" class='rem' value={{this.cno}}>REMOVE</a></td>
+          <td><a href="#" class='edit' value={{this.cno}}>Edit</a>
+          <td><a href="#" class='inv' value={{this.cno}}>Mark Invalid</a></td>
+      	</tr>
+        {{/each}}
+</table>
+</div>
+</div>
+<script>
+  $('.rem').on("click",function(){
+    var cno = $(this).attr('value');
+    console.log(cno);
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/removeCode?cno=${cno}`,
+    success: function(data){
+      console.log(data);
+      if(data.status == 1){
+            location.reload();
+      }
+      else {
+        console.log('error deleting');
+      }
+    }
+  });
+});
+
+
+$('.inv').on("click",function(){
+  var cno = $(this).attr('value');
+  console.log(cno);
+$.ajax({
+  type: "GET",
+  contentType: 'application/json',
+  url: `http://localhost:3000/markInvalid?cno=${cno}`,
+  success: function(data){
+    console.log(data);
+    if(data.status == 1){
+          //location.reload();
+    }
+    else {
+      console.log('error marking Invalid');
+    }
+  }
+});
+});
+
+
+$('#submit').on("click",function(){
+  var percent = document.getElementById("percent").value;
+  var start = document.getElementById("start_date").value;
+  start = start.replace(/T/g," ") + ":00";
+  var end = document.getElementById("end_date").value;
+  end = end.replace(/T/g," ") + ":00";
+  console.log(start);
+  console.log(end);
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/addCode?percent=${percent}&start='${start}'&end='${end}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+</script>
+<div id="editModal" class="modal">
+<div class="modal-content">
+  <span class="close">&times;</span>
+  <h3>Add {{title}}</h3>
+  <div class="form-group">
+        <closeCodelabel for="usr">Percent:</label>
+        <input type="text" class="form-control" id="percent">
+        <label for="usr">Start Date:</label>
+        <input type="datetime-local"  id="start_date">
+        <label for="usr">End Date:</label>
+        <input type="datetime-local" id="end_date">
+  </div>
+
+  <button type="button" class="btn btn-primary"  id="submit_edit"> Submit </button>
+</div>
+</div>
+
+<script>
+var editModal = document.getElementById('editModal');
+
+var editSpan = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+editSpan.onclick = function() {
+  editModal.style.display = "none";
+}
+
+$('.edit').on("click",function(){
+  editModal.style.display = "block";
+});
+
+</script>
+<script src="../jquery/codeModal.js"></script>

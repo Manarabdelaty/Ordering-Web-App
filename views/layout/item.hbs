@@ -1,0 +1,108 @@
+<link rel="stylesheet" type="text/css" href="../public/table.css">
+<link rel="stylesheet" type="text/css" href="../public/modal.css">
+<h1>Menue Items List</h1>
+<button type="button" class="btn btn-primary" id="add">Add Item</button>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content
+  <label for="usr">Price:</label>
+  <input type="text" class="form-control" id="price">
+  <label for="usr">Config:</label>
+  <select class="form-control" id="sel1">
+    {{#each config}}
+    <option>{{this.name}}</option>
+    {{/each}}
+  </select>
+
+  -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Add Item</h3>
+    <div class="form-group">
+          <label for="usr">Name:</label>
+          <input type="text" class="form-control" id="name">
+    </div>
+    <button type="button" class="btn btn-primary"  id="submit"> Submit </button>
+  </div>
+</div>
+
+<div id="itemModal" class="modal">
+<!-- Modal two content -->
+<div class="modal-content">
+  <span class="closeEdit">&times;</span>
+  <h3>Edit Item</h3>
+  <div class="form-group">
+        <label for="usr">New Name</label>
+        <input type="text" class="form-control" id="new_name">
+  </div>
+  <button type="button" class="btn btn-primary"  id="submitEdit"> Submit </button>
+</div>
+</div>
+
+<div class="list">
+<div class="invoice-table">
+  <table style="width:100%">
+ 		   	 <tr>
+    			<th></th>
+    			<th>NAME</th>
+    			<th>ACTION</th>
+  			</tr>
+        {{#each list}}
+  			<tr>
+    			<td>
+    				<div class="left"> <p>{{@index}}</p></div>
+    				<div class = "right">
+    					<p id="item">ITEM</p>
+    					<p><a href="http://localhost:3000/ItemConfig?item_id={{this.id}}&rest_id={{this.rest_id}}&menue_type={{this.menue_type}}"> {{this.name}}</a></p>
+    				</div>
+    			</td>
+   				<td>{{this.name}}</td>
+    			<td><a href="#" class='rem' item_id={{this.id}} rest_id={{this.rest_id}} menue_type={{this.menue_type}}>REMOVE</a>
+              <a href="#" class='edit' item_id={{this.id}} rest_id={{this.rest_id}} menue_type={{this.menue_type}}>Edit</a>
+          </td>
+  			</tr>
+        {{/each}}
+</table>
+</div>
+</div>
+<script>
+  $('.rem').on("click",function(){
+    var item_id  = $(this).attr('item_id');
+    var type_id = $(this).attr('menue_type');
+    var rest_id = $(this).attr('rest_id');
+
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/removeItem?id='${item_id}'&type_id='${type_id}'&rest_id='${rest_id}'`,
+    success: function(data){
+      console.log(data);
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error deleting');
+    }
+  });
+});
+
+
+$('#submit').on("click",function(){
+  var name = document.getElementById("name").value;
+  var rest_id = {{rest_id}};
+  var menue_type = {{menue_type}};
+
+  $.ajax({
+    type: "GET",
+    contentType: 'application/json',
+    url: `http://localhost:3000/addItem?name='${name}'&rest_id='${rest_id}'&menue_type='${menue_type}'`,
+    success: function(data){
+      if(data.status == 1)
+            location.reload();
+      else
+        console.log('error adding');
+    }
+  });
+});
+</script>
+<script src="../jquery/modal.js"></script>
+<script src="../jquery/editItem.js"></script>

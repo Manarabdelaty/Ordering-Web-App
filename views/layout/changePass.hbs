@@ -1,0 +1,27 @@
+<h3>Change Password</h3>
+<div class="form-group">
+      <label for="usr">New Password:</label>
+      <input type="password" class="form-control" id="pass">
+      <label for="usr">Confirm Password:</label>
+      <input type="password" class="form-control" id="passtwo">
+</div>
+<button type="button" class="btn btn-primary"  id="submit_pass"> Submit </button>
+
+<script>
+$('#submit_pass').on("click",function(){
+  var data = {};
+  data.pass = document.getElementById("pass").value;
+  var pass_confirm = document.getElementById("passtwo").value;
+  $.ajax({
+    type: 'POST',
+    data: JSON.stringify(data),
+    contentType: 'application/json',
+    url: 'http://localhost:3000/changeMyPass',
+    success: function(data) {
+        console.log(JSON.stringify(data));
+        if (data.status == 1)
+          console.log('success');
+      }
+  });
+});
+</script>
